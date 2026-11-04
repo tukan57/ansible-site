@@ -1,0 +1,14 @@
+- name: first play (install epel, cowsay)
+  hosts: nori.nti.tul.cz
+  become: true
+
+  tasks:
+    - name: install EPEL
+      ansible.builtin.dnf:
+        name: epel-release
+        state: present
+
+    - name: install cowsay
+      ansible.builtin.dnf:
+        name: cowsay
+        state: present
