@@ -4,3 +4,5 @@
 # The imported playbooks must be idempotent as site.yml may be run repeatedly for periodic remediation.
 - name: first play (install epel, cowsay)
   ansible.builtin.import_playbook: playbooks/playbook1.yml
+- name:  (define users and attach ssh keys)
+  ansible.builtin.import_playbook: playbooks/user_auth.yml

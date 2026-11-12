@@ -1,0 +1,23 @@
+- name: Definice uživetelů a jejich klíčů
+  hosts: nori.nti.tul.cz
+  become: true
+
+  tasks:
+    - name: Definice uživatelů
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        state: present
+        update_password: on_create
+      loop: "{{ users }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Připojení SSH klíčů k uživateli
+      ansible.posix.authorized_key:
+        user: "{{ item.name }}"
+        state: present
+        key: "{{ item.ssh_keys | join('\n') }}"
+        exclusive: true
+      loop: "{{ users }}"
+      loop_control:
+        label: "{{ item.name }}"
