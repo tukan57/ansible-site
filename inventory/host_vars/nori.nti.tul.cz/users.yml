@@ -1,0 +1,7 @@
+users:
+  - name: tukan57
+    ssh_keys:
+      - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICviTSpspgkXI5MYWizFGCuVTduHgEsK8Z50T7KPd8Cj tukan@Tukan"
+  - name: test_user1
+    ssh_keys:
+      - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICviTSpspgkXI5MYWizFGCuVTduHgEsK8Z50T7KPd8Cj tukan@Tukan"
