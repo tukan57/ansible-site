@@ -6,3 +6,5 @@
   ansible.builtin.import_playbook: playbooks/playbook1.yml
 - name:  (define users and attach ssh keys)
   ansible.builtin.import_playbook: playbooks/user_auth.yml
+- name: setup samba server
+  ansible.builtin.import_playbook: playbooks/samba.yml

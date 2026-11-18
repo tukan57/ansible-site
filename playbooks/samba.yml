@@ -1,0 +1,64 @@
+- name: Samba server
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Instalace Samby
+      ansible.builtin.dnf:
+        name:
+          - samba
+          - samba-client
+        state: present
+
+    - name: Uživatel Samba
+      ansible.builtin.user:
+        name: "{{ samba_user }}"
+        shell: /usr/sbin/nologin
+        create_home: false
+        password_lock: true
+        system: true
+        state: present
+
+    - name: Samba files
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ samba_user }}"
+        group: "{{ samba_user }}"
+        mode: "0700"
+        setype: samba_share_t
+      loop: "{{ samba_shares }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: smb.conf
+      ansible.builtin.template:
+        src: smb.conf.j2
+        dest: /etc/samba/smb.conf
+        owner: root
+        group: root
+        mode: "0644"
+        backup: true
+        validate: "testparm -s %s"
+      notify: Restart smb
+
+    - name: Spuštění smb
+      ansible.builtin.service:
+        name: smb
+        state: started
+        enabled: true
+
+    - name: Nastavení firewall
+      ansible.posix.firewalld:
+        rich_rule: >-
+          rule family="ipv4" source address="{{ samba_allowed_network }}"
+          port port="445" protocol="tcp" accept
+        permanent: true
+        immediate: true
+        state: enabled
+
+  handlers:
+    - name: Restart smb
+      ansible.builtin.service:
+        name: smb
+        state: restarted

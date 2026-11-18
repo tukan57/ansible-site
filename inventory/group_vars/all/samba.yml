@@ -1,0 +1,17 @@
+samba_user: sambauser
+
+samba_workgroup: WORKGROUP
+samba_server_string: Samba Server
+
+samba_allowed_network: "147.230.0.0/16"
+
+samba_shares:
+  - name: public
+    path: /srv/samba/public
+    options:
+      browseable: "yes"
+      read only: "no"
+      guest ok: "no"
+      valid users: "{{ samba_user }}"
+      create mask: "0600"
+      directory mask: "0700"
